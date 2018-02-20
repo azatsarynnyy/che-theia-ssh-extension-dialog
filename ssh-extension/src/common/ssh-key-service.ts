@@ -9,12 +9,17 @@
  *   Red Hat, Inc. - initial API and implementation
  */
 
-import { injectable } from "inversify";
+export const sshKeyServicePath = '/services/ssh';
+export const SshKeyService = Symbol("SshKeyService");
 
-@injectable()
-export class SshKeyService {
+/**
+ * The JSON-RPC SSH key service interface.
+ */
+export interface SshKeyService {
 
-    getKeys(): string[] {
-        return ["key 1", "key 2"];
-    }
+    generate(name: string): Promise<string>;
+
+    get(): Promise<string[]>;
+
+    remove(name: string): Promise<void>;
 }

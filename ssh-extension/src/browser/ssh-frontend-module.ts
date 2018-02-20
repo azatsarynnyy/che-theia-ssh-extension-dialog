@@ -12,10 +12,15 @@
 import { ContainerModule } from "inversify";
 import { CommandContribution, MenuContribution } from "@theia/core/lib/common";
 import { SshFrontendContribution } from './ssh-frontend-contribution';
-import { SshKeyService } from './ssh-key-service';
+import { SshKeyService, sshKeyServicePath } from '../common/ssh-key-service';
+import { WebSocketConnectionProvider } from "@theia/core/lib/browser";
 
 export default new ContainerModule(bind => {
     bind(CommandContribution).to(SshFrontendContribution).inSingletonScope();
     bind(MenuContribution).to(SshFrontendContribution).inSingletonScope();
-    bind(SshKeyService).toSelf().inSingletonScope();
+
+    bind(SshKeyService).toDynamicValue(ctx => {
+        const provider = ctx.container.get(WebSocketConnectionProvider);
+        return provider.createProxy<SshKeyService>(sshKeyServicePath);
+    }).inSingletonScope();
 });

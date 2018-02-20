@@ -16,6 +16,7 @@
     "@theia/monaco": "latest",
     "@theia/typescript": "latest",
     "@theia/messages": "latest",
+    "@theia/extension-manager": "latest",
     "ssh-extension": "0.0.0"
   },
   "devDependencies": {

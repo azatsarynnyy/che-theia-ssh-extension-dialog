@@ -9,10 +9,11 @@
  *   Red Hat, Inc. - initial API and implementation
  */
 
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegistry } from "@theia/core/lib/common";
 import { CommonMenus } from "@theia/core/lib/browser";
 import { SshManagerDialog } from "./ssh-manager-dialog";
+import { SshKeyService } from "../common/ssh-key-service";
 
 export const SshCommand = {
     id: 'ssh-manage.openDialog',
@@ -21,6 +22,9 @@ export const SshCommand = {
 
 @injectable()
 export class SshFrontendContribution implements CommandContribution, MenuContribution {
+
+    constructor(@inject(SshKeyService) protected sshKeyService: SshKeyService) {
+    }
 
     private dialog: SshManagerDialog | undefined;
 
@@ -34,7 +38,7 @@ export class SshFrontendContribution implements CommandContribution, MenuContrib
         if (this.dialog === undefined) {
             this.dialog = new SshManagerDialog({
                 title: 'Manage SSH keys'
-            });
+            }, this.sshKeyService);
         }
         return this.dialog;
     }

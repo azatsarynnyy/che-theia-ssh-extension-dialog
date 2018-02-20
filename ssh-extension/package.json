@@ -23,7 +23,8 @@
   },
   "theiaExtensions": [
     {
-      "frontend": "lib/browser/ssh-frontend-module"
+      "frontend": "lib/browser/ssh-frontend-module",
+      "backend": "lib/node/ssh-backend-module"
     }
   ]
 }

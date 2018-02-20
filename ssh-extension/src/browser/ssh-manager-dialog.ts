@@ -9,35 +9,20 @@
  *   Red Hat, Inc. - initial API and implementation
  */
 
-import { injectable, inject } from "inversify";
 import { AbstractDialog, DialogProps } from "@theia/core/lib/browser";
-import { SshKeyService } from './ssh-key-service';
+import { SshKeyWidget } from './ssh-key-widget';
+import { SshKeyService } from "../common/ssh-key-service";
 
-@injectable
 export class SshManagerDialog extends AbstractDialog<void> {
 
     public readonly value: void;
 
-    constructor(@inject(DialogProps) dialogProps: DialogProps, @inject(SshKeyService) sshKeyService: SshKeyService) {
+    constructor(dialogProps: DialogProps, sshKeyService: SshKeyService) {
         super(dialogProps);
 
-        const listNode = document.createElement("div");
-        listNode.textContent = "SSH keys list";
-        this.contentNode.appendChild(listNode);
+        const sshKeyWidget = new SshKeyWidget(sshKeyService);
+        this.contentNode.appendChild(sshKeyWidget.node);
 
-        listNode.appendChild(this.createNode());
-        listNode.appendChild(this.createNode());
-
-        this.appendCloseButton();
-    }
-
-    private createNode(): Node {
-        const listNode = document.createElement("div");
-        listNode.textContent = "ssh key node";
-        return listNode;
-    }
-
-    private getSshKeys() {
-        
+        this.appendCloseButton("Close");
     }
 }
